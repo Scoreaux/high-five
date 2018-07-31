@@ -6,10 +6,14 @@
   "scripts": {
     "clean": "rm -rf ./dist",
     "start": "npm run build:dev && node ./dist/server/index.js",
-    "start:nobuild": "node ./dist/server/index.js",
-    "client:dev": "npm run clean && webpack-dev-server --mode development --config ./webpack.client.config.js",
-    "build:dev": "npm run clean && webpack --mode development --config ./webpack.server.config.js && webpack --mode development --config ./webpack.client.config.js",
-    "build:prod": "npm run clean && webpack --mode production --config ./webpack.server.config.js && webpack --mode production --config ./webpack.client.config.js"
+    "start:server": "npm run build:server:dev && node ./dist/server/index.js",
+    "start:client": "webpack-dev-server --mode development --config ./webpack.client.config.js",
+    "build:dev": "npm run clean && npm run build:server:dev && npm run build:client:dev",
+    "build:prod": "npm run clean && npm run build:server:prod && npm run build:client:prod",
+    "build:server:dev": "webpack --mode development --config ./webpack.server.config.js",
+    "build:server:prod": "webpack --mode production --config ./webpack.server.config.js",
+    "build:client:dev": "webpack --mode development --config ./webpack.client.config.js",
+    "build:client:prod": "webpack --mode production --config ./webpack.client.config.js"
   },
   "keywords": [],
   "author": "",

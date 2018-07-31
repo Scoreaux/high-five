@@ -3,9 +3,7 @@ import winston, { format } from 'winston';
 const { printf, timestamp, colorize, combine } = format;
 
 // Define your custom format with printf.
-const myFormat = printf((info) => {
-  return `${info.timestamp} ${info.level}: ${info.message}`;
-});
+const myFormat = printf(info => `${info.timestamp} ${info.level}: ${info.message}`);
 
 const logger = winston.createLogger({
   format: combine(
