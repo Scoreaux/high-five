@@ -1,11 +1,8 @@
 const path = require('path');
-const HtmlWebPackPlugin = require("html-webpack-plugin");
-const webpack = require('webpack');
 
 const alias = require('./webpack.alias');
 
 module.exports = (env, argv) => {
-
   // Create initial config object with options shared in both development and
   // production environments
   const config = {
@@ -26,10 +23,10 @@ module.exports = (env, argv) => {
           test: /\.jsx?$/,
           exclude: '/node_modules/',
           use: {
-            loader: 'babel-loader'
-          }
+            loader: 'babel-loader',
+          },
         },
-      ]
+      ],
     },
     resolve: {
       alias,

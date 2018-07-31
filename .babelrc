@@ -2,11 +2,14 @@
   "presets": [
     ["env", {
       "targets": {
-        "electron": "1.8.4"
-      },
-      "modules": false
+        "node": "8.1.2",
+        "chrome": 59
+      }
     }],
     "react"
   ],
-  "plugins": ["transform-object-rest-spread"]
+  "plugins": [
+    "transform-object-rest-spread",
+    "transform-class-properties"
+  ]
 }
