@@ -3,7 +3,12 @@ import fs from 'fs';
 
 import paths from 'server/paths';
 
-const { printf, timestamp, colorize, combine } = format;
+const {
+  printf,
+  timestamp,
+  colorize,
+  combine,
+} = format;
 
 // Create folder for logs if it doesn't exist yet
 fs.access(paths.log, (err) => {
@@ -12,9 +17,10 @@ fs.access(paths.log, (err) => {
   }
 });
 
-// Define your custom format with printf.
+// Create custom format for logs
 const myFormat = printf(info => `${info.timestamp} ${info.level}: ${info.message}`);
 
+// Create logger instance
 const logger = winston.createLogger({
   format: combine(
     timestamp(),
@@ -33,9 +39,8 @@ const logger = winston.createLogger({
   ],
 });
 
-console.log(`${paths.log}/combined.log`);
-
 if (process.env.NODE_ENV === 'development') {
+  // Add console output for logs
   logger.add(new winston.transports.Console({}));
 }
 

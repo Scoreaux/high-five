@@ -26,6 +26,11 @@ module.exports = (env, argv) => {
             loader: 'babel-loader',
           },
         },
+        {
+          test: /\.mjs$/,
+          include: /node_modules/,
+          type: 'javascript/auto',
+        },
       ],
     },
     resolve: {

@@ -53,12 +53,16 @@
     "webpack-dev-server": "^3.1.5"
   },
   "dependencies": {
+    "apollo-server-koa": "^2.0.0",
     "axios": "^0.18.0",
     "client-oauth2": "^4.2.1",
     "conf": "^2.0.0",
     "electron-store": "^2.0.0",
     "env-paths": "^1.0.0",
     "express": "^4.16.3",
+    "graphql": "^0.13.2",
+    "koa": "^2.5.2",
+    "koa-static": "^5.0.0",
     "lodash": "^4.17.10",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
