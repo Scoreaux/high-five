@@ -1,5 +1,4 @@
 import winston, { format } from 'winston';
-import fs from 'fs';
 
 import paths from 'server/paths';
 
@@ -9,13 +8,6 @@ const {
   colorize,
   combine,
 } = format;
-
-// Create folder for logs if it doesn't exist yet
-fs.access(paths.log, (err) => {
-  if (err) {
-    fs.mkdir(paths.log, () => {});
-  }
-});
 
 // Create custom format for logs
 const myFormat = printf(info => `${info.timestamp} ${info.level}: ${info.message}`);
