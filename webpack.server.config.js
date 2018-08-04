@@ -1,4 +1,5 @@
 const path = require('path');
+const nodeExternals = require('webpack-node-externals');
 
 const alias = require('./webpack.alias');
 
@@ -8,6 +9,7 @@ module.exports = (env, argv) => {
   const config = {
     mode: argv.mode || 'development',
     target: 'node',
+    externals: [nodeExternals()],
     context: path.resolve(__dirname, 'src'),
     entry: './server/index.js',
     output: {
