@@ -1,18 +1,15 @@
 const path = require('path');
-const HtmlWebPackPlugin = require("html-webpack-plugin");
-const webpack = require('webpack');
-const spawn = require('child_process').spawn;
+const HtmlWebPackPlugin = require('html-webpack-plugin');
 
 const alias = require('./webpack.alias');
 
 const views = ['client'];
 
 module.exports = (env, argv) => {
-
   const htmlPlugins = views.map(view => (
     new HtmlWebPackPlugin({
-      template: `./client/index.html`,
-      filename: `./client.html`,
+      template: './client/index.html',
+      filename: './client.html',
       chunks: [view],
     })
   ));
@@ -43,7 +40,7 @@ module.exports = (env, argv) => {
           test: /\.html$/,
           use: [
             {
-              loader: "html-loader",
+              loader: 'html-loader',
               options: { minimize: true }
             }
           ]
@@ -51,17 +48,17 @@ module.exports = (env, argv) => {
         {
           test: /\.s?css$/,
           use: [
-            "style-loader",
+            'style-loader',
             {
-              loader: "css-loader",
+              loader: 'css-loader',
               query: {
                 modules: true,
                 localIdentName: '[name]__[local]___[hash:base64:5]',
               },
             },
-            "resolve-url-loader",
+            'resolve-url-loader',
             {
-              loader: "postcss-loader",
+              loader: 'postcss-loader',
               options: {
                 sourceMap: true,
               }

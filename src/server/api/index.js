@@ -34,7 +34,7 @@ const resolvers = {
               logger.error('Error saving file, truncated?', error);
             }
           })
-          .pipe(fs.createWriteStream(`${paths.data}/${filename}`))
+          .pipe(fs.createWriteStream(`${paths.data}/modules/${filename}`))
           .on('error', error => logger.error(`Error saving file ${error}`))
           .on('finish', () => logger.info(`${filename} saved to data folder`));
       }
