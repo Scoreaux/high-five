@@ -1,4 +1,5 @@
 import winston, { format } from 'winston';
+import { SPLAT } from 'triple-beam';
 
 import paths from 'server/paths';
 
@@ -7,14 +8,16 @@ const {
   timestamp,
   colorize,
   combine,
+  splat,
 } = format;
 
 // Create custom format for logs
-const myFormat = printf(info => `${info.timestamp} ${info.level}: ${info.message}`);
+const myFormat = printf(info => `${info.timestamp} ${info.level}: ${info.message}${info[SPLAT] ? `\n${info[SPLAT]}` : ''}`);
 
 // Create logger instance
 const logger = winston.createLogger({
   format: combine(
+    splat(),
     timestamp(),
     colorize(),
     myFormat,
