@@ -39,7 +39,8 @@
       "globals": {
         "shallow": false,
         "render": false,
-        "mount": false
+        "mount": false,
+        "__non_webpack_require__": false
       }
     }
   ]

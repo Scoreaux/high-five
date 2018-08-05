@@ -1,7 +1,7 @@
 import winston, { format } from 'winston';
 import { SPLAT } from 'triple-beam';
 
-import paths, { createLogFolder } from 'server/paths';
+import paths, { createFolder } from 'server/paths';
 
 const {
   printf,
@@ -29,7 +29,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 async function init() {
-  await createLogFolder();
+  await createFolder(paths.log);
 
   logger.add(new winston.transports.File({
     filename: `${paths.log}/combined.log`,
