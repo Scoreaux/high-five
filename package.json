@@ -1,7 +1,11 @@
 {
   "name": "high-five",
-  "version": "2.0.0",
-  "description": "",
+  "version": "0.1.0",
+  "description": "Modular visual control system",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Scoreaux/high-five.git"
+  },
   "main": "dist/main.js",
   "scripts": {
     "clean": "rm -rf ./dist",
@@ -31,7 +35,7 @@
     "css-loader": "^1.0.0",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
-    "eslint": "^5.2.0",
+    "eslint": "^5.3.0",
     "eslint-config-airbnb": "^17.0.0",
     "eslint-plugin-import": "^2.13.0",
     "eslint-plugin-jsx-a11y": "^6.1.1",
