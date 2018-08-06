@@ -2,8 +2,8 @@ import fs from 'fs';
 import { promisify } from 'util';
 import watch from 'node-watch';
 
-import paths from 'server/paths';
-import logger from 'server/logger';
+import { paths } from 'app/fs';
+import logger from 'app/logger';
 
 export function isOSFile(path = '') {
   if (

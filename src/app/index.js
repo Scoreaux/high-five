@@ -1,11 +1,11 @@
 import Koa from 'koa';
 import serve from 'koa-static';
 import path from 'path';
-import gqlServer from 'server/api';
-import { createAllFolders } from 'server/paths';
+import gqlServer from 'app/server';
+import { createAllFolders } from 'app/fs';
 
-import logger from 'server/logger';
-import * as modules from 'server/controllers/modules';
+import logger from 'app/logger';
+import * as modules from 'app/controllers/modules';
 
 // Create Koa instance
 const app = new Koa();

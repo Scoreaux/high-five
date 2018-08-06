@@ -1,9 +1,8 @@
 import { ApolloServer, gql } from 'apollo-server-koa';
-import path from 'path';
-import paths from 'server/paths';
+import { paths } from 'app/fs';
 import fs from 'fs';
 
-import logger from 'server/logger';
+import logger from 'app/logger';
 
 // Construct a schema, using GraphQL schema language
 const typeDefs = gql`
@@ -28,12 +27,6 @@ const resolvers = {
       // Save file to data folder
       if (mimetype === 'application/zip') {
         stream
-          .on('error', (error) => {
-            if (stream.truncated) {
-              fs.unlinkSync(path);
-              logger.error('Error saving file, truncated?', error);
-            }
-          })
           .pipe(fs.createWriteStream(`${paths.modules}/${filename}`))
           .on('error', error => logger.error(`Error saving file ${error}`))
           .on('finish', () => logger.info(`${filename} saved to modules folder`));

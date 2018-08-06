@@ -5,13 +5,13 @@
   "main": "dist/main.js",
   "scripts": {
     "clean": "rm -rf ./dist",
-    "start": "npm run build:dev && node ./dist/server/index.js",
-    "start:server": "npm run build:server:dev && node ./dist/server/index.js",
+    "start": "npm run build:dev && node ./dist/app/index.js",
+    "start:app": "npm run build:app:dev && node ./dist/app/index.js",
     "start:client": "webpack-dev-server --mode development --config ./webpack.client.config.js",
-    "build:dev": "npm run clean && npm run build:server:dev && npm run build:client:dev",
-    "build:prod": "npm run clean && npm run build:server:prod && npm run build:client:prod",
-    "build:server:dev": "webpack --mode development --config ./webpack.server.config.js",
-    "build:server:prod": "webpack --mode production --config ./webpack.server.config.js",
+    "build:dev": "npm run clean && npm run build:app:dev && npm run build:client:dev",
+    "build:prod": "npm run clean && npm run build:app:prod && npm run build:client:prod",
+    "build:app:dev": "webpack --mode development --config ./webpack.app.config.js",
+    "build:app:prod": "webpack --mode production --config ./webpack.app.config.js",
     "build:client:dev": "webpack --mode development --config ./webpack.client.config.js",
     "build:client:prod": "webpack --mode production --config ./webpack.client.config.js",
     "test": "jest"
@@ -50,7 +50,7 @@
     "style-loader": "^0.21.0",
     "webpack": "^4.16.3",
     "webpack-cli": "^3.1.0",
-    "webpack-dev-server": "^3.1.5",
+    "webpack-dev-app": "^3.1.5",
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
@@ -59,7 +59,7 @@
     "apollo-link": "^1.2.2",
     "apollo-link-error": "^1.1.0",
     "apollo-link-http": "^1.5.4",
-    "apollo-server-koa": "^2.0.0",
+    "apollo-app-koa": "^2.0.0",
     "apollo-upload-client": "^8.1.0",
     "axios": "^0.18.0",
     "client-oauth2": "^4.2.1",
@@ -93,7 +93,7 @@
       "\\.(gif|png|jpe?g|svg)$": "<rootDir>/__mocks__/fileMock.js",
       "\\.(json|geojson|)$": "<rootDir>/__mocks__/jsonMock.js",
       "^.+\\.(css|scss)$": "identity-obj-proxy",
-      "^server(.*)$": "<rootDir>/src/server$1",
+      "^app(.*)$": "<rootDir>/src/app$1",
       "^client(.*)$": "<rootDir>/src/client$1"
     }
   }

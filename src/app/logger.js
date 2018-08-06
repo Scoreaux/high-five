@@ -1,7 +1,7 @@
 import winston, { format } from 'winston';
 import { SPLAT } from 'triple-beam';
 
-import paths, { createFolder } from 'server/paths';
+import { paths, createFolder } from 'app/fs';
 
 const {
   printf,

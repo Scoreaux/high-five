@@ -11,9 +11,9 @@ module.exports = (env, argv) => {
     target: 'node',
     externals: [nodeExternals()],
     context: path.resolve(__dirname, 'src'),
-    entry: './server/index.js',
+    entry: './app/index.js',
     output: {
-      path: path.resolve(__dirname, 'dist/server'),
+      path: path.resolve(__dirname, 'dist/app'),
       filename: 'index.js',
     },
     node: {
