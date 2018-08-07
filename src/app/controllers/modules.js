@@ -4,17 +4,7 @@ import watch from 'node-watch';
 
 import { paths } from 'app/fs';
 import logger from 'app/logger';
-
-export function isOSFile(path = '') {
-  if (
-    path.toLowerCase().endsWith('.ds_store')
-    || path.toLowerCase().endsWith('thumbs.db')
-    || path.toLowerCase().endsWith('ethumbs.db')
-  ) {
-    return true;
-  }
-  return false;
-}
+import isOSFile from './isOSFile';
 
 export async function loadModule(file = '') {
   const moduleTypes = ['source', 'modifier', 'view'];
