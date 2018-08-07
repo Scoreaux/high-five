@@ -3,17 +3,13 @@ import fs from 'fs';
 import paths from './paths';
 import createFolder from './createFolder';
 
-beforeEach(() => {
-  jest.mock('fs');
-});
+
+jest.mock('fs');
+fs.mkdir.mockImplementation((_, callback) => { callback(); });
 
 afterEach(() => {
   jest.clearAllMocks();
 });
-
-jest.mock('fs');
-
-fs.mkdir.mockImplementation((_, callback) => { callback(); });
 
 test('Folder is created if it doesnt exist', async () => {
   fs.access.mockImplementationOnce((_, callback) => {
@@ -22,7 +18,7 @@ test('Folder is created if it doesnt exist', async () => {
 
   await createFolder(paths.log);
 
-  expect(fs.mkdir.mock.calls.length).toBe(1);
+  expect(fs.mkdir).toHaveBeenCalledTimes(1);
 });
 
 test('Folder is not created if it already exists', async () => {
@@ -32,7 +28,7 @@ test('Folder is not created if it already exists', async () => {
 
   await createFolder(paths.log);
 
-  expect(fs.mkdir.mock.calls.length).toBe(0);
+  expect(fs.mkdir).not.toHaveBeenCalled();
 });
 
 test('Failure to create folder throws error', async () => {
