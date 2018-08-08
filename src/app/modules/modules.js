@@ -4,7 +4,7 @@ import watch from 'node-watch';
 
 import { paths } from 'app/fs';
 import logger from 'app/logger';
-import isOSFile from './isOSFile';
+import { isOSFile } from 'app/utility';
 
 export async function loadModule(file = '') {
   const moduleTypes = ['source', 'modifier', 'view'];

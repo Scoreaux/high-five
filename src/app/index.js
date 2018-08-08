@@ -5,7 +5,7 @@ import gqlServer from 'app/server';
 import { createAllFolders } from 'app/fs';
 
 import logger from 'app/logger';
-import * as modules from 'app/controllers/modules';
+import * as modules from 'app/modules/modules';
 
 // Create Koa instance
 const app = new Koa();
