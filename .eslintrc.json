@@ -34,13 +34,13 @@
       "files": ["**/*.js", "**/*.jsx"],
       "rules": {
         "function-paren-newline": "off",
-        "comma-dangle": "off"
+        "comma-dangle": "off",
+        "import/no-useless-path-segments": "off"
       },
       "globals": {
         "shallow": false,
         "render": false,
-        "mount": false,
-        "__non_webpack_require__": false
+        "mount": false
       }
     }
   ]

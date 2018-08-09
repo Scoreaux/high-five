@@ -23,7 +23,10 @@ const logger = winston.createLogger({
   ),
 });
 
-if (process.env.NODE_ENV === 'development') {
+if (
+  process.env.NODE_ENV === 'development'
+  || process.env.NODE_ENV === 'test'
+) {
   // Add console output for logs
   logger.add(new winston.transports.Console({}));
 }

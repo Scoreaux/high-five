@@ -1,15 +1,17 @@
 import watch from 'node-watch';
-import * as modules from './modules';
 import watchForChanges from './watchForChanges';
+import loadModule from './loadModule';
+import unloadModule from './unloadModule';
 
 jest.mock('node-watch');
-jest.mock('./modules');
+jest.mock('./loadModule');
+jest.mock('./unloadModule');
 
 watch.mockImplementation(() => ({
   on: jest.fn(),
 }));
 
-afterEach(() => {
+beforeEach(() => {
   jest.clearAllMocks();
 });
 
@@ -33,7 +35,7 @@ test('Change event of type update calls loadModule() with updated file path', ()
 
   onChange('update', filePath);
 
-  expect(modules.loadModule.mock.calls[0][0]).toBe(filePath);
+  expect(loadModule.mock.calls[0][0]).toBe(filePath);
 });
 
 test('Change event of type update with OS file does not call loadModule()', () => {
@@ -43,7 +45,7 @@ test('Change event of type update with OS file does not call loadModule()', () =
 
   onChange('update', filePath);
 
-  expect(modules.loadModule).not.toHaveBeenCalled();
+  expect(loadModule).not.toHaveBeenCalled();
 });
 
 test('Change event of type remove calls unloadModule() with updated file path', () => {
@@ -53,7 +55,7 @@ test('Change event of type remove calls unloadModule() with updated file path', 
 
   onChange('remove', filePath);
 
-  expect(modules.unloadModule.mock.calls[0][0]).toBe(filePath);
+  expect(unloadModule.mock.calls[0][0]).toBe(filePath);
 });
 
 test('Change event of type remove with OS file does not call unloadModule', () => {
@@ -63,7 +65,7 @@ test('Change event of type remove with OS file does not call unloadModule', () =
 
   onChange('remove', filePath);
 
-  expect(modules.loadModule).not.toHaveBeenCalled();
+  expect(loadModule).not.toHaveBeenCalled();
 });
 
 test('Change event of unknown type results in no action', () => {
@@ -73,6 +75,6 @@ test('Change event of unknown type results in no action', () => {
 
   onChange('test', filePath);
 
-  expect(modules.loadModule).not.toHaveBeenCalled();
-  expect(modules.unloadModule).not.toHaveBeenCalled();
+  expect(loadModule).not.toHaveBeenCalled();
+  expect(unloadModule).not.toHaveBeenCalled();
 });

@@ -5,7 +5,7 @@ import gqlServer from 'app/server';
 import { createAllFolders } from 'app/fs';
 
 import logger from 'app/logger';
-import * as modules from 'app/modules/modules';
+import * as modules from 'app/modules';
 
 // Create Koa instance
 const app = new Koa();
@@ -32,6 +32,3 @@ async function init() {
 }
 
 init();
-
-// const requireFunc = typeof __webpack_require__ === "function" ? __non_webpack_require__ : require;
-// const foo = requireFunc(moduleName);

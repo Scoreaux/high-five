@@ -1,7 +1,8 @@
 import watch from 'node-watch';
 import { isOSFile } from 'app/utility';
 import { paths } from 'app/fs';
-import { loadModule, unloadModule } from './modules';
+import loadModule from './loadModule';
+import unloadModule from './unloadModule';
 
 function watchForChanges() {
   // Create data folder watcher
