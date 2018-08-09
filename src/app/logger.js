@@ -29,16 +29,19 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 async function init() {
-  await createFolder(paths.log);
+  // Don't add file logging when testing
+  if (process.env.NODE_ENV !== 'test') {
+    await createFolder(paths.log);
 
-  logger.add(new winston.transports.File({
-    filename: `${paths.log}/combined.log`,
-    level: 'info',
-  }));
-  logger.add(new winston.transports.File({
-    filename: `${paths.log}/error.log`,
-    level: 'error',
-  }));
+    logger.add(new winston.transports.File({
+      filename: `${paths.log}/combined.log`,
+      level: 'info',
+    }));
+    logger.add(new winston.transports.File({
+      filename: `${paths.log}/error.log`,
+      level: 'error',
+    }));
+  }
 }
 
 init();

@@ -43,7 +43,7 @@ export async function unloadModule(name) {
   logger.info(`Unloaded module ${name}`);
 }
 
-export async function watchForModuleChanges() {
+export function watchForModuleChanges() {
   // Create data folder watcher
   const dataWatcher = watch(paths.modules, { recursive: false });
 

@@ -3,7 +3,7 @@ import { isOSFile } from 'app/utility';
 import { paths } from 'app/fs';
 import { loadModule, unloadModule } from './modules';
 
-async function watchForChanges() {
+function watchForChanges() {
   // Create data folder watcher
   const dataWatcher = watch(paths.modules, { recursive: false });
 
