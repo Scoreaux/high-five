@@ -11,13 +11,11 @@ function watchForChanges() {
   dataWatcher.on('change', (e, file) => {
     if (e === 'update') {
       // File has been updated/created, load/reload module
-      // logger.info(`Item ${file} updated`);
       if (!isOSFile(file)) {
         loadModule(file);
       }
     } else if (e === 'remove') {
       // File has been deleted, unload module
-      // logger.info(`Item ${file} removed`);
       if (!isOSFile(file)) {
         unloadModule(file);
       }
