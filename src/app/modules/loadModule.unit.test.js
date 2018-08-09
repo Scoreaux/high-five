@@ -1,13 +1,7 @@
 import fs from 'fs';
 
-import { safeRequire } from 'app/utility';
-import logger from 'app/logger';
+import { logger, safeRequire } from 'app/utility';
 import loadModule from './loadModule';
-
-jest.mock('app/logger', () => ({
-  error: jest.fn(),
-  info: jest.fn(),
-}));
 
 jest.mock('fs');
 fs.stat.mockImplementation((_, callback) => {
@@ -16,16 +10,20 @@ fs.stat.mockImplementation((_, callback) => {
   });
 });
 
+jest.mock('app/utility', () => ({
+  safeRequire: jest.fn(),
+  logger: {
+    error: jest.fn(),
+    info: jest.fn(),
+  },
+}));
+
 beforeEach(() => {
   jest.clearAllMocks();
 
   // Add cache object to safeRequire so cached files can be removed
   safeRequire.cache = {};
 });
-
-jest.mock('app/utility', () => ({
-  safeRequire: jest.fn(),
-}));
 
 test('Calling function with no file path logs an error', async () => {
   await loadModule();

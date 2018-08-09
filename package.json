@@ -18,7 +18,9 @@
     "build:app:prod": "webpack --mode production --config ./webpack.app.config.js",
     "build:client:dev": "webpack --mode development --config ./webpack.client.config.js",
     "build:client:prod": "webpack --mode production --config ./webpack.client.config.js",
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "keywords": [],
   "author": "",

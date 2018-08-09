@@ -4,7 +4,7 @@ import path from 'path';
 import gqlServer from 'app/server';
 import { createAllFolders } from 'app/fs';
 
-import logger from 'app/logger';
+import { logger } from 'app/utility';
 import * as modules from 'app/modules';
 
 // Create Koa instance

@@ -2,7 +2,7 @@ import { promisify } from 'util';
 import fs from 'fs';
 
 import { paths } from 'app/fs';
-import logger from 'app/logger';
+import { logger } from 'app/utility';
 import { isOSFile } from 'app/utility';
 import loadModule from './loadModule';
 import watchForChanges from './watchForChanges';

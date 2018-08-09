@@ -1,7 +1,7 @@
 import { promisify } from 'util';
 import fs from 'fs';
 
-import logger from 'app/logger';
+import { logger } from 'app/utility';
 import { safeRequire } from 'app/utility';
 
 async function loadModule(file = '') {

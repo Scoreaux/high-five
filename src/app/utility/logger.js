@@ -23,21 +23,19 @@ const logger = winston.createLogger({
   ),
 });
 
-if (
-  process.env.NODE_ENV === 'development'
-  || process.env.NODE_ENV === 'test'
-) {
-  // Add console output for logs
-  logger.add(new winston.transports.Console({
-    silent: process.env.NODE_ENV === 'test',
-  }));
-}
-
 async function init() {
-  // Don't add file logging when testing
+  if (process.env.NODE_ENV !== 'production') {
+    // Add console output
+    logger.add(new winston.transports.Console({
+      silent: process.env.NODE_ENV === 'test',
+    }));
+  }
+
   if (process.env.NODE_ENV !== 'test') {
+    // Create logs folder
     await createFolder(paths.log);
 
+    // Add file outputs
     logger.add(new winston.transports.File({
       filename: `${paths.log}/combined.log`,
       level: 'info',

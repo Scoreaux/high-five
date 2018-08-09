@@ -1,4 +1,4 @@
-import logger from 'app/logger';
+import { logger } from 'app/utility';
 
 async function unloadModule(name = '') {
   logger.info(`Unloaded module ${name}`);

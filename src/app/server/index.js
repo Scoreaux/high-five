@@ -2,7 +2,7 @@ import { ApolloServer, gql } from 'apollo-server-koa';
 import { paths } from 'app/fs';
 import fs from 'fs';
 
-import logger from 'app/logger';
+import { logger } from 'app/utility';
 
 // Construct a schema, using GraphQL schema language
 const typeDefs = gql`
