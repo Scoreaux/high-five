@@ -24,26 +24,34 @@ const logger = winston.createLogger({
 });
 
 async function init() {
-  if (process.env.NODE_ENV !== 'production') {
-    // Add console output
-    logger.add(new winston.transports.Console({
-      silent: process.env.NODE_ENV === 'test',
-    }));
-  }
+  try {
+    if (process.env.NODE_ENV !== 'production') {
+      // console.log(logger);
+      // Add console output
+      logger.add(new winston.transports.Console({
+        silent: process.env.NODE_ENV === 'test',
+      }));
+    }
 
-  if (process.env.NODE_ENV !== 'test') {
-    // Create logs folder
-    await createFolder(paths.log);
+    if (process.env.NODE_ENV !== 'test') {
+      // Create logs folder
+      await createFolder(paths.log);
 
-    // Add file outputs
-    logger.add(new winston.transports.File({
-      filename: `${paths.log}/combined.log`,
-      level: 'info',
-    }));
-    logger.add(new winston.transports.File({
-      filename: `${paths.log}/error.log`,
-      level: 'error',
-    }));
+      // Add file outputs
+      logger.add(new winston.transports.File({
+        filename: `${paths.log}/combined.log`,
+        level: 'info',
+      }));
+      logger.add(new winston.transports.File({
+        filename: `${paths.log}/error.log`,
+        level: 'error',
+      }));
+    }
+
+    return true;
+  } catch (error) {
+    console.log('Error starting logger', error);
+    return false;
   }
 }
 
