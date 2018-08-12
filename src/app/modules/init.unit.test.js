@@ -1,12 +1,10 @@
 import fs from 'fs';
 
-import { paths } from 'app/fs';
-import loadModule from './loadModule';
 import init from './init';
 
+jest.mock('./ModuleManager');
+
 jest.mock('fs');
-jest.mock('./loadModule');
-jest.mock('./watchForChanges');
 
 const fileList = ['file.txt', 'thumbs.db'];
 
@@ -32,10 +30,4 @@ test('Function returns false when error occurs reading modules directory', async
   const result = await init();
 
   expect(result).toBe(false);
-});
-
-test('loadModule() is called for each non OS file returned by fs.readdir()', async () => {
-  await init();
-
-  expect(loadModule).toHaveBeenCalledWith(`${paths.modules}/${fileList[0]}`);
 });

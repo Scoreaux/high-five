@@ -2,23 +2,19 @@ import { promisify } from 'util';
 import fs from 'fs';
 
 import { paths } from 'app/fs';
-import { logger } from 'app/utility';
-import { isOSFile } from 'app/utility';
-import loadModule from './loadModule';
-import watchForChanges from './watchForChanges';
+import { logger, isOSFile } from 'app/utility';
+import ModuleManager from './ModuleManager';
 
 async function init() {
   try {
-    // Call loadModule in each file in modules folder
+    const modules = new ModuleManager();
+    // Load modules in each file in modules folder
     const contents = await promisify(fs.readdir)(paths.modules);
     contents.forEach((file) => {
       if (!isOSFile(file)) {
-        loadModule(`${paths.modules}/${file}`);
+        modules.add(`${paths.modules}/${file}`);
       }
     });
-
-    // Watch for changes in modules folder
-    watchForChanges();
 
     return true;
   } catch (error) {
