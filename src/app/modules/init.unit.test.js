@@ -1,6 +1,7 @@
 import fs from 'fs';
 
 import init from './init';
+import ModuleManager from './ModuleManager';
 
 jest.mock('./ModuleManager');
 
@@ -19,7 +20,7 @@ beforeEach(() => {
 test('Function returns true when no error occurs reading modules directory', async () => {
   const result = await init();
 
-  expect(result).toBe(true);
+  expect(result instanceof ModuleManager).toBe(true);
 });
 
 test('Function returns false when error occurs reading modules directory', async () => {
@@ -29,5 +30,5 @@ test('Function returns false when error occurs reading modules directory', async
 
   const result = await init();
 
-  expect(result).toBe(false);
+  expect(result).toBeFalsy();
 });

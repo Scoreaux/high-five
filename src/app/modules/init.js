@@ -16,10 +16,10 @@ async function init() {
       }
     });
 
-    return true;
+    return modules;
   } catch (error) {
     logger.error('Couldn\'t initialize modules', error);
-    return false;
+    return null;
   }
 }
 
