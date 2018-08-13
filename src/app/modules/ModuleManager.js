@@ -71,8 +71,8 @@ class ModuleManager {
   stopWatching() {
     if (this.watcher) {
       this.watcher.close();
-      this.watcher = null;
     }
+    this.watcher = null;
   }
 }
 

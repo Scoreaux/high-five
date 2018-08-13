@@ -27,8 +27,6 @@ test('Logger exists', () => {
   // winston.createLogger.mockImplementation(() => ({
   //   add: jest.fn(),
   // }));
-
-  console.log(winston);
   //expect(winston.createLogger).toHaveBeenCalledTimes(1);
   expect(true).toBe(true);
 });

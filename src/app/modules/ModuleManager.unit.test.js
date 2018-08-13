@@ -13,9 +13,12 @@ const testModule = {
 };
 
 jest.mock('node-watch');
+let hasClosed = false;
 watch.mockImplementation(() => ({
   on: jest.fn(),
-  close: jest.fn(),
+  close: () => {
+    hasClosed = true;
+  },
 }));
 
 jest.mock('./getModuleInfo');
@@ -23,6 +26,7 @@ getModuleInfo.mockImplementation(() => testModule);
 
 beforeEach(() => {
   jest.clearAllMocks();
+  hasClosed = false;
 });
 
 describe('constructor()', () => {
@@ -159,6 +163,16 @@ describe('watcher', () => {
     expect(modules.add).toHaveBeenCalledWith(testPath);
   });
 
+  test('Change event of type update calls doesn\'t call add() when file path is an OS file', () => {
+    const modules = new ModuleManager();
+    modules.add = jest.fn();
+    const onChange = modules.watcher.on.mock.calls[0][1];
+
+    onChange('update', 'test/.DS_Store');
+
+    expect(modules.add).not.toHaveBeenCalled();
+  });
+
   test('Change event of type remove calls remove() with file path', () => {
     const modules = new ModuleManager();
     modules.remove = jest.fn();
@@ -167,6 +181,16 @@ describe('watcher', () => {
     onChange('remove', testPath);
 
     expect(modules.remove).toHaveBeenCalledWith(testPath);
+  });
+
+  test('Change event of type remove calls doesn\'t call remove() when file path is an OS file', () => {
+    const modules = new ModuleManager();
+    modules.remove = jest.fn();
+    const onChange = modules.watcher.on.mock.calls[0][1];
+
+    onChange('remove', 'test/.DS_Store');
+
+    expect(modules.remove).not.toHaveBeenCalled();
   });
 
   test('Change event of unknown type logs an error', () => {
@@ -192,7 +216,22 @@ describe('watcher', () => {
     expect(logSpy).toHaveBeenCalledTimes(1);
   });
 
-  test('stopWatching() clears watcher', () => {
+  test('stopWatching() calls close() on existing watcher', () => {
+    const modules = new ModuleManager();
+    modules.stopWatching();
+
+    expect(hasClosed).toBe(true);
+  });
+
+  test('stopWatching() Doesn\'t call close() when watcher doesn\'t exist', () => {
+    const modules = new ModuleManager();
+    modules.watcher = null;
+    modules.stopWatching();
+
+    expect(hasClosed).toBe(false);
+  });
+
+  test('stopWatching() removes watcher instance', () => {
     const modules = new ModuleManager();
     modules.stopWatching();
 
