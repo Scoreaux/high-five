@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1534159718844" clover="3.2.0">
-  <project timestamp="1534159718844" name="All files">
-    <metrics statements="89" coveredstatements="84" conditionals="43" coveredconditionals="41" methods="18" coveredmethods="18" elements="150" coveredelements="143" complexity="0" loc="89" ncloc="89" packages="4" files="12" classes="12">
+<coverage generated="1534331657748" clover="3.2.0">
+  <project timestamp="1534331657748" name="All files">
+    <metrics statements="88" coveredstatements="83" conditionals="43" coveredconditionals="41" methods="18" coveredmethods="18" elements="149" coveredelements="142" complexity="0" loc="88" ncloc="88" packages="4" files="12" classes="12">
       <package name="high-five">
         <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <file name="setupTests.js" path="/Users/dylan/Documents/Git/high-five/setupTests.js">
@@ -40,7 +40,7 @@
         </file>
       </package>
       <package name="high-five.src.app.modules">
-        <metrics statements="55" coveredstatements="55" conditionals="26" coveredconditionals="26" methods="13" coveredmethods="13"/>
+        <metrics statements="54" coveredstatements="54" conditionals="26" coveredconditionals="26" methods="13" coveredmethods="13"/>
         <file name="ModuleManager.js" path="/Users/dylan/Documents/Git/high-five/src/app/modules/ModuleManager.js">
           <metrics statements="35" coveredstatements="35" conditionals="15" coveredconditionals="15" methods="10" coveredmethods="10"/>
           <line num="9" count="25" type="stmt"/>
@@ -94,16 +94,15 @@
           <line num="33" count="1" type="stmt"/>
         </file>
         <file name="init.js" path="/Users/dylan/Documents/Git/high-five/src/app/modules/init.js">
-          <metrics statements="9" coveredstatements="9" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
-          <line num="9" count="2" type="stmt"/>
-          <line num="10" count="2" type="stmt"/>
-          <line num="12" count="2" type="stmt"/>
-          <line num="13" count="1" type="stmt"/>
-          <line num="14" count="2" type="cond" truecount="2" falsecount="0"/>
-          <line num="15" count="1" type="stmt"/>
-          <line num="19" count="1" type="stmt"/>
-          <line num="21" count="1" type="stmt"/>
-          <line num="22" count="1" type="stmt"/>
+          <metrics statements="8" coveredstatements="8" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
+          <line num="8" count="1" type="stmt"/>
+          <line num="11" count="4" type="stmt"/>
+          <line num="13" count="4" type="stmt"/>
+          <line num="14" count="2" type="stmt"/>
+          <line num="15" count="4" type="cond" truecount="2" falsecount="0"/>
+          <line num="16" count="2" type="stmt"/>
+          <line num="20" count="1" type="stmt"/>
+          <line num="24" count="1" type="stmt"/>
         </file>
       </package>
       <package name="high-five.src.app.utility">
@@ -113,9 +112,9 @@
         </file>
         <file name="isOSFile.js" path="/Users/dylan/Documents/Git/high-five/src/app/utility/isOSFile.js">
           <metrics statements="3" coveredstatements="3" conditionals="6" coveredconditionals="6" methods="1" coveredmethods="1"/>
-          <line num="2" count="11" type="cond" truecount="2" falsecount="0"/>
-          <line num="7" count="6" type="stmt"/>
-          <line num="9" count="5" type="stmt"/>
+          <line num="2" count="13" type="cond" truecount="2" falsecount="0"/>
+          <line num="7" count="7" type="stmt"/>
+          <line num="9" count="6" type="stmt"/>
         </file>
         <file name="logger.js" path="/Users/dylan/Documents/Git/high-five/src/app/utility/logger.js">
           <metrics statements="14" coveredstatements="9" conditionals="6" coveredconditionals="4" methods="2" coveredmethods="2"/>

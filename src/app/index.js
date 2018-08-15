@@ -5,7 +5,6 @@ import gqlServer from 'app/server';
 import { createAllFolders } from 'app/fs';
 
 import { logger } from 'app/utility';
-import * as modules from 'app/modules';
 
 // Create Koa instance
 const app = new Koa();
@@ -13,9 +12,6 @@ const app = new Koa();
 async function init() {
   // Create data files and folders required for app to run
   await createAllFolders();
-
-  // Load modules from data folder into app state
-  modules.init();
 
   // Serve static client files
   app.use(serve(path.resolve(__dirname, '../client'), {

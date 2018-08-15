@@ -1,10 +1,10 @@
 import fs from 'fs';
 
-import init from './init';
+import { logger } from 'app/utility';
 import ModuleManager from './ModuleManager';
+import modules, { init } from './init';
 
 jest.mock('./ModuleManager');
-
 jest.mock('fs');
 
 const fileList = ['file.txt', 'thumbs.db'];
@@ -15,20 +15,32 @@ fs.readdir.mockImplementation((_, callback) => {
 
 beforeEach(() => {
   jest.clearAllMocks();
+  modules.list = [];
 });
 
-test('Function returns true when no error occurs reading modules directory', async () => {
-  const result = await init();
-
-  expect(result instanceof ModuleManager).toBe(true);
+test('Default export returns ModuleManager instance', async () => {
+  expect(modules instanceof ModuleManager).toBe(true);
 });
 
-test('Function returns false when error occurs reading modules directory', async () => {
+test('Files in modules folder on load are read', async () => {
+  await init();
+
+  expect(fs.readdir).toHaveBeenCalledTimes(1);
+});
+
+test('Error reading files in modules folder logs an error', async () => {
   fs.readdir.mockImplementationOnce((_, callback) => {
-    callback('error');
+    callback(new Error());
   });
+  const logSpy = jest.spyOn(logger, 'error');
 
-  const result = await init();
+  await init();
 
-  expect(result).toBeFalsy();
+  expect(logSpy).toHaveBeenCalledTimes(1);
+});
+
+test('Non OS files are added to ModuleManager instance', async () => {
+  await init();
+
+  expect(modules.add).toHaveBeenCalledTimes(1);
 });
