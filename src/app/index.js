@@ -1,9 +1,11 @@
 import Koa from 'koa';
 import serve from 'koa-static';
 import path from 'path';
-import gqlServer from 'app/server';
+import gqlServer, { schema } from 'app/server';
 import { createAllFolders } from 'app/fs';
 import modules from 'app/modules';
+import { SubscriptionServer } from 'subscriptions-transport-ws';
+import { execute, subscribe } from 'graphql';
 
 import { logger } from 'app/utility';
 
@@ -23,8 +25,17 @@ async function init() {
   gqlServer.applyMiddleware({ app });
 
   // Start server
-  app.listen({ port: 5555 }, () => {
+  const server = app.listen({ port: 5555 }, () => {
     logger.info('Koa server started on port 5555');
+  });
+
+  const subServer = new SubscriptionServer({
+    execute,
+    subscribe,
+    schema: gqlServer.schema,
+  }, {
+    path: '/subscriptions',
+    server,
   });
 }
 
