@@ -3,6 +3,7 @@ import serve from 'koa-static';
 import path from 'path';
 import gqlServer from 'app/server';
 import { createAllFolders } from 'app/fs';
+import modules from 'app/modules';
 
 import { logger } from 'app/utility';
 
