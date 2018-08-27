@@ -1,7 +1,9 @@
+// @flow
+
 import Koa from 'koa';
 import serve from 'koa-static';
 import path from 'path';
-import gqlServer, { schema } from 'app/server';
+import gqlServer from 'app/server';
 import { createAllFolders } from 'app/fs';
 import modules from 'app/modules';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
@@ -12,7 +14,7 @@ import { logger } from 'app/utility';
 // Create Koa instance
 const app = new Koa();
 
-async function init() {
+async function init(): Promise<void> {
   // Create data files and folders required for app to run
   await createAllFolders();
 

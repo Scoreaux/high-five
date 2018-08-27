@@ -6,7 +6,8 @@
         "chrome": 59
       }
     }],
-    "react"
+    "react",
+    "flow",
   ],
   "plugins": [
     "transform-object-rest-spread",
