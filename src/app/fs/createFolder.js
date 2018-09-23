@@ -1,7 +1,9 @@
+// @flow
+
 import fs from 'fs';
 import { promisify } from 'util';
 
-async function createFolder(path) {
+async function createFolder(path: string): Promise<boolean> {
   try {
     // Create folder for logs if it doesn't exist yet
     try {

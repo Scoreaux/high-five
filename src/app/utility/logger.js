@@ -1,3 +1,5 @@
+// @flow
+
 import winston, { format } from 'winston';
 import { SPLAT } from 'triple-beam';
 
@@ -23,7 +25,7 @@ const logger = winston.createLogger({
   ),
 });
 
-async function init() {
+async function init(): Promise<boolean> {
   try {
     if (process.env.NODE_ENV !== 'production') {
       // console.log(logger);

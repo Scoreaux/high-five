@@ -1,4 +1,6 @@
-function isOSFile(path = '') {
+// @flow
+
+function isOSFile(path: string = ''): boolean {
   if (
     path.toLowerCase().endsWith('.ds_store')
     || path.toLowerCase().endsWith('thumbs.db')

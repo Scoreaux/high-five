@@ -40,7 +40,7 @@ class ModuleManager {
     }
   }
 
-  remove(path: string) {
+  remove(path: string): boolean {
     const listLength = this.list.length;
     this.list = this.list.filter(item => item.path !== path);
     if (listLength > this.list.length) {
@@ -51,11 +51,11 @@ class ModuleManager {
     return false;
   }
 
-  find(name: string) {
+  find(name: string): ?ModuleDefinition {
     return this.list.find(item => item.name === name);
   }
 
-  startWatching() {
+  startWatching(): void {
     try {
       this.watcher = watch(this.path);
 
@@ -82,7 +82,7 @@ class ModuleManager {
     }
   }
 
-  stopWatching() {
+  stopWatching(): void {
     if (this.watcher) {
       this.watcher.close();
     }
