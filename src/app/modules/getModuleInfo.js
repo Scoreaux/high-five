@@ -1,11 +1,14 @@
+// @flow
+
 import { promisify } from 'util';
 import fs from 'fs';
 
 import { safeRequire } from 'app/utility';
+import type { ModuleDefinition } from './types';
 
-const moduleTypes = ['source', 'modifier', 'view'];
+const moduleTypes: Array<string> = ['source', 'modifier', 'view'];
 
-async function getModuleInfo(path = '') {
+async function getModuleInfo(path: string = ''): Promise<ModuleDefinition> {
   // Get path stats
   const stats = await promisify(fs.stat)(path);
 

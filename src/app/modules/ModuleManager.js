@@ -1,11 +1,25 @@
+// @flow
+
 import watch from 'node-watch';
 
 import { logger, isOSFile } from 'app/utility';
 import { paths } from 'app/fs';
 import getModuleInfo from './getModuleInfo';
+import { type ModuleDefinition } from './types';
+
+type ConstructorArgs = {
+  modules: Array<ModuleDefinition>,
+  path: string,
+}
 
 class ModuleManager {
-  constructor({ modules = [], path = paths.modules } = {}) {
+  list: Array<ModuleDefinition>;
+
+  watcher: watch;
+
+  path: string;
+
+  constructor({ modules = [], path = paths.modules }: ConstructorArgs = {}): void {
     logger.info('Module manager created');
 
     this.list = modules;
@@ -14,19 +28,19 @@ class ModuleManager {
     this.startWatching();
   }
 
-  async add(path) {
+  async add(path: string = ''): Promise<?ModuleDefinition> {
     try {
-      const module = await getModuleInfo(path);
+      const module: ModuleDefinition = await getModuleInfo(path);
       this.list.push(module);
       logger.info(`Added module: ${module.name}`);
       return module;
     } catch (error) {
       logger.error('Couldn\'t add module', error);
-      return false;
+      return null;
     }
   }
 
-  remove(path) {
+  remove(path: string) {
     const listLength = this.list.length;
     this.list = this.list.filter(item => item.path !== path);
     if (listLength > this.list.length) {
@@ -37,7 +51,7 @@ class ModuleManager {
     return false;
   }
 
-  find(name) {
+  find(name: string) {
     return this.list.find(item => item.name === name);
   }
 
