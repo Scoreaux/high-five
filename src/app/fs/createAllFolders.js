@@ -1,12 +1,11 @@
-// @flow
+// @flow strict
 
-import paths from './paths';
 import createFolder from './createFolder';
 
-async function createAllFolders(): Promise<boolean> {
-  const createdLog = await createFolder(paths.log);
-  const createdData = await createFolder(paths.data);
-  const createdModules = await createFolder(paths.modules);
+async function createAllFolders(path: string): Promise<boolean> {
+  const createdLog = await createFolder(`${path}/logs`);
+  const createdData = await createFolder(`${path}/data`);
+  const createdModules = await createFolder(`${path}/modules`);
 
   return (createdLog && createdData && createdModules);
 }

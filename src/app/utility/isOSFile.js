@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 function isOSFile(path: string = ''): boolean {
   if (

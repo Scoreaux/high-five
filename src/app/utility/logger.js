@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import winston, { format } from 'winston';
 import { SPLAT } from 'triple-beam';

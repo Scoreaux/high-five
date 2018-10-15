@@ -21,7 +21,11 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "flow": "flow"
+    "flow": "flow",
+    "bin:dev": "npm run build:dev && high-five"
+  },
+  "bin": {
+    "high-five": "./bin/index.js"
   },
   "keywords": [],
   "author": "",
@@ -59,11 +63,9 @@
     "style-loader": "^0.21.0",
     "webpack": "^4.16.3",
     "webpack-cli": "^3.1.0",
-    "webpack-dev-app": "^3.1.5",
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
-    "apollo-app-koa": "^2.0.0",
     "apollo-cache-inmemory": "^1.3.0-beta.6",
     "apollo-client": "^2.3.7",
     "apollo-link": "^1.2.2",

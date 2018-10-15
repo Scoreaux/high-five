@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import envPaths from 'env-paths';
 

@@ -2,7 +2,6 @@ import { ApolloServer, gql } from 'apollo-server-koa';
 import { paths } from 'app/fs';
 import fs from 'fs';
 import { PubSub } from 'graphql-subscriptions';
-import { makeExecutableSchema } from 'graphql-tools';
 
 import { logger } from 'app/utility';
 import types from './types';
@@ -56,16 +55,14 @@ const resolvers = {
   },
 };
 
-setTimeout(() => {
-  logger.info('Pubsubbing!');
-  pubsub.publish('modulesUpdated', {
-    modulesUpdated: [{
-      name: 'TEST MODULE PUBSUB!',
-    }],
-  });
-}, 15000);
-
-// export const schema = makeExecutableSchema({ typeDefs, resolvers });
+// setTimeout(() => {
+//   logger.info('Pubsubbing!');
+//   pubsub.publish('modulesUpdated', {
+//     modulesUpdated: [{
+//       name: 'TEST MODULE PUBSUB!',
+//     }],
+//   });
+// }, 15000);
 
 // Create GraphQL server instance and attach to Koa instance
 const gqlServer = new ApolloServer({

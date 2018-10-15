@@ -1,9 +1,8 @@
-// @flow
+// @flow strict
 
 import watch from 'node-watch';
 
 import { logger, isOSFile } from 'app/utility';
-import { paths } from 'app/fs';
 import getModuleInfo from './getModuleInfo';
 import { type ModuleDefinition } from './types';
 
@@ -19,7 +18,7 @@ class ModuleManager {
 
   path: string;
 
-  constructor({ modules = [], path = paths.modules }: ConstructorArgs = {}): void {
+  constructor({ modules = [], path }: ConstructorArgs = {}): void {
     logger.info('Module manager created');
 
     this.list = modules;

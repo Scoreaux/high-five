@@ -15,6 +15,8 @@ module.exports = (env, argv) => {
     output: {
       path: path.resolve(__dirname, 'dist/app'),
       filename: 'index.js',
+      library: 'highFive',
+      libraryTarget: 'umd',
     },
     node: {
       __dirname: false,
