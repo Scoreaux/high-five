@@ -1,35 +1,42 @@
-import winston from 'winston';
+import createLogger from './createLogger';
 
-beforeEach(() => {
-  jest.resetModules();
-  jest.clearAllMocks();
+test('createLogger returns winston logger instance', async () => {
+  const logger = await createLogger();
+
+  expect(logger).toHaveProperty('info', 'warn', 'error');
 });
 
-test('Logger exists', () => {
-  jest.doMock('winston', () => ({
-    __esModule: true,
-    default: {
-      createLogger: jest.fn(),
-      transports: {
-        Console: class {},
-        File: class {},
-      },
-    },
-    format: {
-      printf: jest.fn(),
-      timestamp: jest.fn(),
-      colorize: jest.fn(),
-      combine: jest.fn(),
-      splat: jest.fn(),
-    },
-  }));
-  // const winston = require('winston').default;
-  // winston.createLogger.mockImplementation(() => ({
-  //   add: jest.fn(),
-  // }));
-  //expect(winston.createLogger).toHaveBeenCalledTimes(1);
-  expect(true).toBe(true);
-});
+
+// beforeEach(() => {
+//   jest.resetModules();
+//   jest.clearAllMocks();
+// });
+//
+// test('Logger exists', () => {
+//   jest.doMock('winston', () => ({
+//     __esModule: true,
+//     default: {
+//       createLogger: jest.fn(),
+//       transports: {
+//         Console: class {},
+//         File: class {},
+//       },
+//     },
+//     format: {
+//       printf: jest.fn(),
+//       timestamp: jest.fn(),
+//       colorize: jest.fn(),
+//       combine: jest.fn(),
+//       splat: jest.fn(),
+//     },
+//   }));
+//   // const winston = require('winston').default;
+//   // winston.createLogger.mockImplementation(() => ({
+//   //   add: jest.fn(),
+//   // }));
+//   //expect(winston.createLogger).toHaveBeenCalledTimes(1);
+//   expect(true).toBe(true);
+// });
 
 // test('Single transport type is added with NODE_ENV is test', () => {
 //   jest.doMock('winston', () => ({

@@ -2,12 +2,15 @@
 
 import createFolder from './createFolder';
 
-async function createAllFolders(path: string): Promise<boolean> {
-  const createdLog = await createFolder(`${path}/logs`);
-  const createdData = await createFolder(`${path}/data`);
-  const createdModules = await createFolder(`${path}/modules`);
+async function createAllFolders(paths: { [string]: string } = {}): Promise<boolean> {
+  const actions = Object.keys(paths).map(key => createFolder(paths[key]));
 
-  return (createdLog && createdData && createdModules);
+  const results = await Promise.all(actions);
+
+  if (results.length > 0 && !results.includes(false)) {
+    return true;
+  }
+  return false;
 }
 
 export default createAllFolders;

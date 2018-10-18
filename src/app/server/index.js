@@ -3,7 +3,6 @@ import { paths } from 'app/fs';
 import fs from 'fs';
 import { PubSub } from 'graphql-subscriptions';
 
-import { logger } from 'app/utility';
 import types from './types';
 import queries from './queries';
 
@@ -41,8 +40,8 @@ const resolvers = {
       if (mimetype === 'application/zip') {
         stream
           .pipe(fs.createWriteStream(`${paths.modules}/${filename}`))
-          .on('error', error => logger.error(`Error saving file ${error}`))
-          .on('finish', () => logger.info(`${filename} saved to modules folder`));
+          .on('error', error => console.log(`Error saving file ${error}`))
+          .on('finish', () => console.log(`${filename} saved to modules folder`));
       }
 
       return `Received file: ${filename}`;

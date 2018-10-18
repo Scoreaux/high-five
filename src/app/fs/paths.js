@@ -7,13 +7,15 @@ type SystemPaths = {
   config: string,
   cache: string,
   log: string,
-  tempt: string,
+  temp: string,
 }
 
 type AppPaths = { modules: string }
 
+export type Paths = SystemPaths & AppPaths
+
 const systemPaths: SystemPaths = envPaths('high-five');
-const paths: SystemPaths & AppPaths = {
+const paths: Paths = {
   ...systemPaths,
   modules: `${systemPaths.data}/modules`,
 };

@@ -1,14 +1,18 @@
 // @flow strict
 
 import watch from 'node-watch';
+import type { Logger } from 'winston';
+import fs from 'fs';
+import { promisify } from 'util';
 
-import { logger, isOSFile } from 'app/utility';
+import { isOSFile } from 'app/utility';
 import getModuleInfo from './getModuleInfo';
 import { type ModuleDefinition } from './types';
 
 type ConstructorArgs = {
   modules: Array<ModuleDefinition>,
   path: string,
+  logger: Logger,
 }
 
 class ModuleManager {
@@ -18,11 +22,16 @@ class ModuleManager {
 
   path: string;
 
-  constructor({ modules = [], path }: ConstructorArgs = {}): void {
-    logger.info('Module manager created');
+  logger: Logger;
 
+  constructor({ modules = [], path, logger }: ConstructorArgs = {}): void {
     this.list = modules;
     this.path = path;
+    this.logger = logger;
+
+    this.logger.info('Module manager created');
+
+    this.addInitialModules();
 
     this.startWatching();
   }
@@ -31,10 +40,10 @@ class ModuleManager {
     try {
       const module: ModuleDefinition = await getModuleInfo(path);
       this.list.push(module);
-      logger.info(`Added module: ${module.name}`);
+      this.logger.info(`Added module: ${module.name}`);
       return module;
     } catch (error) {
-      logger.error('Couldn\'t add module', error);
+      this.logger.error('Couldn\'t add module', error);
       return null;
     }
   }
@@ -43,15 +52,29 @@ class ModuleManager {
     const listLength = this.list.length;
     this.list = this.list.filter(item => item.path !== path);
     if (listLength > this.list.length) {
-      logger.info(`Removed module at path: ${path}`);
+      this.logger.info(`Removed module at path: ${path}`);
       return true;
     }
-    logger.error(`Couldn't remove module, no matching module was found (${path})`);
+    this.logger.error(`Couldn't remove module, no matching module was found (${path})`);
     return false;
   }
 
   find(name: string): ?ModuleDefinition {
     return this.list.find(item => item.name === name);
+  }
+
+  async addInitialModules(): Promise<void> {
+    try {
+      // Load modules in each file in modules folder
+      const contents = await promisify(fs.readdir)(this.path);
+      contents.forEach((file) => {
+        if (!isOSFile(file)) {
+          this.add(`${this.path}/${file}`);
+        }
+      });
+    } catch (error) {
+      this.logger.error('Couldn\'t add initial modules', error);
+    }
   }
 
   startWatching(): void {
@@ -69,15 +92,15 @@ class ModuleManager {
             this.remove(path);
           }
         } else {
-          logger.error(`Unknown change event of type ${e} occurred`);
+          this.logger.error(`Unknown change event of type ${e} occurred`);
         }
       });
 
       this.watcher.on('error', (error) => {
-        logger.error('An error occurred watching for changes in modules folder', error);
+        this.logger.error('An error occurred watching for changes in modules folder', error);
       });
     } catch (error) {
-      logger.error('An error occurred starting watcher on modules folder', error);
+      this.logger.error('An error occurred starting watcher on modules folder', error);
     }
   }
 

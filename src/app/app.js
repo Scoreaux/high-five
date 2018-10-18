@@ -1,49 +1,84 @@
 // @flow strict
 
 import Koa from 'koa';
-import type { Server } from 'koa';
+import type { ServerType } from 'koa';
 import serve from 'koa-static';
 import path from 'path';
 import gqlServer from 'app/server';
+import type { Logger } from 'winston';
 import { createAllFolders } from 'app/fs';
-// import modules from 'app/modules';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { execute, subscribe } from 'graphql';
 
-import { logger } from 'app/utility';
+import { createLogger } from 'app/utility';
+
+type RequiredPaths = {
+  data: string,
+  log: string,
+  modules: string,
+}
 
 type Props = {
   port?: number,
-  directory?: string,
+  paths?: RequiredPaths,
+  cwd?: string,
 }
 
 export default class App {
-  app: Koa = new Koa()
+  koa: Koa = new Koa();
 
-  server: Server;
+  logger: Logger;
+
+  server: ServerType;
 
   subServer: SubscriptionServer;
 
-  directory: string;
+  paths: RequiredPaths;
 
-  constructor({ port, directory }: Props = {}) {
-    // Create data files and folders required for app to run
-    this.path = directory || process.cwd();
-    createAllFolders(this.directory);
+  port: number = 5555;
+
+  constructor({ port, cwd, paths }: Props = {}) {
+    // Set server port number
+    if (port) {
+      this.port = port;
+    }
+
+    // Constract paths object
+    if (paths) {
+      // Paths provided in props, set as paths for app instance
+      this.paths = paths;
+    } else {
+      // Create paths for app instance based on working directory
+      const cwdPath: string = cwd || process.cwd();
+      this.paths = {
+        data: `${cwdPath}/data`,
+        log: `${cwdPath}/logs`,
+        modules: `${cwdPath}/modules`,
+      };
+    }
 
     // Serve static client files
-    this.app.use(serve(path.resolve(__dirname, '../client'), {
+    this.koa.use(serve(path.resolve(__dirname, '../client'), {
       index: 'client.html',
     }));
 
-    // Add GraphQL API as middleware to server
-    gqlServer.applyMiddleware({ app: this.app });
+    // Connect GraphQL server to koa instance
+    gqlServer.applyMiddleware({ app: this.koa });
+  }
 
-    // Start server
-    this.server = this.app.listen({ port: port || 5555 }, () => {
-      logger.info(`Koa server started on port ${port || 5555}`);
+  async start() {
+    // Create data files and folders required for app to run
+    await createAllFolders(this.paths);
+
+    // Create logger instance
+    this.logger = await createLogger();
+
+    // Start HTTP server
+    this.server = this.koa.listen({ port: this.port }, () => {
+      this.logger.info(`Koa server started on port ${this.port}`);
     });
 
+    // Create subscription server and attach to GraphQL server
     this.subServer = new SubscriptionServer({
       execute,
       subscribe,
