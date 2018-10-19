@@ -12,6 +12,7 @@ import path from 'path';
 import { createAllFolders } from 'app/fs';
 import { createLogger } from 'app/utility';
 import { typeDefs, createResolvers } from 'app/server';
+import { ModuleManager } from 'app/modules';
 
 type RequiredPaths = {
   data: string,
@@ -37,6 +38,8 @@ export default class App {
   gqlServer: ApolloServer;
 
   subServer: SubscriptionServer;
+
+  modules: ModuleManager;
 
   paths: RequiredPaths;
 
@@ -104,6 +107,12 @@ export default class App {
     }, {
       path: '/subscriptions',
       server: this.httpServer,
+    });
+
+    // Create ModuleManager instance
+    this.modules = new ModuleManager({
+      path: this.paths.modules,
+      logger: this.logger,
     });
   }
 }
