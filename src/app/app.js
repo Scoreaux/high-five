@@ -113,6 +113,7 @@ export default class App {
     this.modules = new ModuleManager({
       path: this.paths.modules,
       logger: this.logger,
+      pubsub: this.pubsub,
     });
   }
 }

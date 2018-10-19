@@ -1,5 +1,6 @@
 import watch from 'node-watch';
 import fs from 'fs';
+import { PubSub } from 'graphql-subscriptions';
 
 import { paths } from 'app/fs';
 import getModuleInfo from './getModuleInfo';
@@ -11,6 +12,9 @@ const testModule = {
   type: 'source',
   path: testPath,
 };
+
+jest.mock('graphql-subscriptions');
+const pubsub = new PubSub();
 
 jest.mock('fs');
 const fileList = ['file.txt', 'thumbs.db'];
@@ -128,6 +132,13 @@ describe('add()', () => {
     await modules.add(testPath);
 
     expect(modules.list).toContain(testModule);
+  });
+
+  test('Pubsub event is triggered', async () => {
+    const modules = new ModuleManager({ logger: logger(), pubsub, });
+    await modules.add(testPath);
+
+    expect(pubsub.publish).toHaveBeenCalledTimes(1);
   });
 });
 

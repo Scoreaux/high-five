@@ -4,6 +4,7 @@ import watch from 'node-watch';
 import type { Logger } from 'winston';
 import fs from 'fs';
 import { promisify } from 'util';
+import { PubSub } from 'graphql-subscriptions';
 
 import { isOSFile } from 'app/utility';
 import getModuleInfo from './getModuleInfo';
@@ -13,6 +14,7 @@ type ConstructorArgs = {
   modules: Array<ModuleDefinition>,
   path: string,
   logger: Logger,
+  pubsub?: PubSub,
 }
 
 class ModuleManager {
@@ -24,10 +26,18 @@ class ModuleManager {
 
   logger: Logger;
 
-  constructor({ modules = [], path, logger }: ConstructorArgs = {}): void {
+  pubsub: PubSub;
+
+  constructor({
+    modules = [],
+    path,
+    logger,
+    pubsub
+  }: ConstructorArgs = {}): void {
     this.list = modules;
     this.path = path;
     this.logger = logger;
+    this.pubsub = pubsub;
 
     this.logger.info('Module manager created');
 
@@ -41,6 +51,12 @@ class ModuleManager {
       const module: ModuleDefinition = await getModuleInfo(path);
       this.list.push(module);
       this.logger.info(`Added module: ${module.name}`);
+      // Publish pubsub event with added module
+      this.pubsub.publish('modulesUpdated', {
+        modulesUpdated: [{
+          name: module.name,
+        }],
+      });
       return module;
     } catch (error) {
       this.logger.error('Couldn\'t add module', error);
