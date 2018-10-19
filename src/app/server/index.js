@@ -1,15 +1,16 @@
-import { ApolloServer, gql } from 'apollo-server-koa';
+// @flow strict
+
+import { gql } from 'apollo-server-koa';
 import { paths } from 'app/fs';
 import fs from 'fs';
-import { PubSub } from 'graphql-subscriptions';
+import type { Logger } from 'winston';
+import type { PubSub } from 'graphql-subscriptions';
 
 import types from './types';
 import queries from './queries';
 
-export const pubsub = new PubSub();
-
-// Construct a schema, using GraphQL schema language
-const typeDefs = gql`
+// Construct a schema using GraphQL schema language
+export const typeDefs = gql`
   type Query {
     hello: String
     ${queries.definitions}
@@ -26,50 +27,42 @@ const typeDefs = gql`
   ${types}
 `;
 
-// Provide resolver functions for your schema fields
-const resolvers = {
-  Query: {
-    hello: () => 'Hello world!',
-    ...queries.resolvers,
-  },
-  Mutation: {
-    async singleUpload(parent, { file }) {
-      const { stream, filename, mimetype, encoding } = await file;
+type Resolvers = {
+  Query: {},
+  Mutation: {},
+  Subscription: {},
+}
 
-      // Save file to data folder
-      if (mimetype === 'application/zip') {
-        stream
-          .pipe(fs.createWriteStream(`${paths.modules}/${filename}`))
-          .on('error', error => console.log(`Error saving file ${error}`))
-          .on('finish', () => console.log(`${filename} saved to modules folder`));
-      }
-
-      return `Received file: ${filename}`;
+// Provide resolver functions for your schema fields with logger and pubsub attachments
+export function createResolvers(pubsub: PubSub, logger: Logger): Resolvers {
+  return {
+    Query: {
+      hello: () => 'Hello world!',
+      ...queries.resolvers,
     },
-  },
-  Subscription: {
-    modulesUpdated: {
-      subscribe: () => pubsub.asyncIterator('modulesUpdated'),
+    Mutation: {
+      async singleUpload(parent, { file }) {
+        const {
+          stream,
+          filename,
+          mimetype,
+        } = await file;
+
+        // Save file to data folder
+        if (mimetype === 'application/zip') {
+          stream
+            .pipe(fs.createWriteStream(`${paths.modules}/${filename}`))
+            .on('error', error => logger.error(`Error saving file ${error}`))
+            .on('finish', () => logger.info(`${filename} saved to modules folder`));
+        }
+
+        return `Received file: ${filename}`;
+      },
     },
-  },
-};
-
-// setTimeout(() => {
-//   logger.info('Pubsubbing!');
-//   pubsub.publish('modulesUpdated', {
-//     modulesUpdated: [{
-//       name: 'TEST MODULE PUBSUB!',
-//     }],
-//   });
-// }, 15000);
-
-// Create GraphQL server instance and attach to Koa instance
-const gqlServer = new ApolloServer({
-  typeDefs,
-  resolvers,
-  subscriptions: {
-    path: '/subscriptions',
-  }
-});
-
-export default gqlServer;
+    Subscription: {
+      modulesUpdated: {
+        subscribe: () => pubsub.asyncIterator('modulesUpdated'),
+      },
+    },
+  };
+}

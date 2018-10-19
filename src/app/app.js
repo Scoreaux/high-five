@@ -3,14 +3,15 @@
 import Koa from 'koa';
 import type { ServerType } from 'koa';
 import serve from 'koa-static';
-import path from 'path';
-import gqlServer from 'app/server';
+import { ApolloServer } from 'apollo-server-koa';
 import type { Logger } from 'winston';
-import { createAllFolders } from 'app/fs';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
+import { PubSub } from 'graphql-subscriptions';
 import { execute, subscribe } from 'graphql';
-
+import path from 'path';
+import { createAllFolders } from 'app/fs';
 import { createLogger } from 'app/utility';
+import { typeDefs, createResolvers } from 'app/server';
 
 type RequiredPaths = {
   data: string,
@@ -25,11 +26,15 @@ type Props = {
 }
 
 export default class App {
-  koa: Koa = new Koa();
+  koa: Koa;
 
   logger: Logger;
 
-  server: ServerType;
+  pubsub: PubSub;
+
+  httpServer: ServerType;
+
+  gqlServer: ApolloServer;
 
   subServer: SubscriptionServer;
 
@@ -43,7 +48,7 @@ export default class App {
       this.port = port;
     }
 
-    // Constract paths object
+    // Construct paths object
     if (paths) {
       // Paths provided in props, set as paths for app instance
       this.paths = paths;
@@ -56,14 +61,6 @@ export default class App {
         modules: `${cwdPath}/modules`,
       };
     }
-
-    // Serve static client files
-    this.koa.use(serve(path.resolve(__dirname, '../client'), {
-      index: 'client.html',
-    }));
-
-    // Connect GraphQL server to koa instance
-    gqlServer.applyMiddleware({ app: this.koa });
   }
 
   async start() {
@@ -73,19 +70,40 @@ export default class App {
     // Create logger instance
     this.logger = await createLogger();
 
-    // Start HTTP server
-    this.server = this.koa.listen({ port: this.port }, () => {
+    // Create Koa instance and serve static client files
+    this.koa = new Koa();
+    this.koa.use(serve(path.resolve(__dirname, '../client'), {
+      index: 'client.html',
+    }));
+
+    // Create PubSub instance to handle GraphQL subscriptions
+    this.pubsub = new PubSub();
+
+    // Create GraphQL server instance
+    this.gqlServer = new ApolloServer({
+      typeDefs,
+      resolvers: createResolvers(this.pubsub, this.logger),
+      subscriptions: {
+        path: '/subscriptions',
+      }
+    });
+
+    // Start HTTP server from Koa instance
+    this.httpServer = this.koa.listen({ port: this.port }, () => {
       this.logger.info(`Koa server started on port ${this.port}`);
     });
 
-    // Create subscription server and attach to GraphQL server
+    // Attach GraphQL server instance to Koa instance
+    this.gqlServer.applyMiddleware({ app: this.koa });
+
+    // Create subscription server instance and attach to GraphQL server instance
     this.subServer = new SubscriptionServer({
       execute,
       subscribe,
-      schema: gqlServer.schema,
+      schema: this.gqlServer.schema,
     }, {
       path: '/subscriptions',
-      server: this.server,
+      server: this.httpServer,
     });
   }
 }
